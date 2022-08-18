@@ -1,9 +1,17 @@
 ---
   el:
     hosts:
-      centos7:
-        ansible_connection: docker
+      server2:
+        ansible_host: 192.168.56.11
+        ansible_user: vagrant
+        ansible_password: vagrant
   deb:
     hosts:
-      ubuntu:
-        ansible_connection: docker
+      server1:
+        ansible_host: 192.168.56.11
+        ansible_user: vagrant
+        ansible_password: vagrant
+  all:
+    hosts:
+      localhost:
+        ansible_connection: local
