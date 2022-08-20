@@ -1,4 +1,0 @@
----
-elastic_version: 8.3.3
-elastic_package: files/elasticsearch-8.3.3-linux-x86_64.tar.gz
-elastic_home: "/opt/elastic/{{ elastic_version }}"

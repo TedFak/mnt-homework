@@ -4,17 +4,13 @@
 1. Приготовьте свой собственный inventory файл `prod.yml`.
 ```bash
 ---
-server1:
+all:
   hosts:
     server1:
       ansible_host: 192.168.56.11
-      ansible_connection: ssh
-      ansible_user: vagrant
-      ansible_password: vagrant
-server2:
-  hosts:
     server2:
       ansible_host: 192.168.56.12
+  vars:
       ansible_connection: ssh
       ansible_user: vagrant
       ansible_password: vagrant

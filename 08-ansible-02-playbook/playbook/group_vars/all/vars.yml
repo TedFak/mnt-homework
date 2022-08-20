@@ -2,3 +2,9 @@
 java_jdk_version: 18.0.2.1
 java_oracle_jdk_package: files/jdk-18_linux-x64_bin.tar.gz
 java_home: "/opt/jdk/{{ java_jdk_version }}"
+elastic_version: 8.3.3
+elastic_package: files/elasticsearch-8.3.3-linux-x86_64.tar.gz
+elastic_home: "/opt/elastic/{{ elastic_version }}"
+kibana_version: 8.3.3
+kibana_package: files/kibana-8.3.3-linux-x86_64.tar.gz
+kibana_home: "/opt/kibana/{{ kibana_version }}"
