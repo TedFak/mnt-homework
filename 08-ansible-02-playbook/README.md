@@ -107,3 +107,13 @@ PLAY RECAP *********************************************************************
 server1                    : ok=9    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
 server2                    : ok=8    changed=0    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
 ```
+9. Подготовьте README.md файл по своему playbook. В нём должно быть описано: что делает playbook, какие у него есть параметры и теги.
+
+- Playbook устанавливет java, elastic и kibana
+- Параметры
+ - copy(копирует файл на удаленый сервер) 
+ - until(будет выполнять распоковку пока не выполниться) 
+ - state(создает директорию) 
+ - unarchive(разархивирует файл)
+ - template(Шаблон файла для целевого хоста)
+- Tags привязаны к tasks из каждого play
