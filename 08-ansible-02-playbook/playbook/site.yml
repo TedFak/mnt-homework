@@ -2,14 +2,10 @@
 - name: Install Java
   hosts: all
   tasks:
-    - name: Set facts for Java 11 vars
-      set_fact:
-        java_home: "/opt/jdk/{{ java_jdk_version }}"
-      tags: java
     - name: Upload .tar.gz file containing binaries from local storage
       copy:
         src: "{{ java_oracle_jdk_package }}"
-        dest: "/tmp/jdk-{{ java_jdk_version }}.tar.gz"
+        dest: "/tmp/jdk-18_linux-x64_bin.tar.gz"
       register: download_java_binaries
       until: download_java_binaries is succeeded
       tags: java
@@ -23,7 +19,7 @@
       become: true
       unarchive:
         copy: false
-        src: "/tmp/jdk-{{ java_jdk_version }}.tar.gz"
+        src: "/tmp/jdk-18_linux-x64_bin.tar.gz"
         dest: "{{ java_home }}"
         extra_opts: [--strip-components=1]
         creates: "{{ java_home }}/bin/java"
@@ -36,32 +32,29 @@
         dest: /etc/profile.d/jdk.sh
       tags: java
 - name: Install Elasticsearch
-  hosts: elasticsearch
+  hosts: server1
   tasks:
-    - name: Upload tar.gz Elasticsearch from remote URL
-      get_url:
-        url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elastic_version }}-linux-x86_64.tar.gz"
-        dest: "/tmp/elasticsearch-{{ elastic_version }}-linux-x86_64.tar.gz"
-        mode: 0755
-        timeout: 60
-        force: true
-        validate_certs: false
-      register: get_elastic
-      until: get_elastic is succeeded
+    - name: Upload .tar.gz file containing binaries from local storage
+      copy:
+        src: "{{ elastic_package }}"
+        dest: "/tmp/elasticsearch-8.3.3-linux-x86_64.tar.gz"
+      register: download_elastic_binaries
+      until: download_elastic_binaries is succeeded
       tags: elastic
-    - name: Create directrory for Elasticsearch
+    - name: Ensure installation dir exists
+      become: true
       file:
         state: directory
         path: "{{ elastic_home }}"
       tags: elastic
-    - name: Extract Elasticsearch in the installation directory
+    - name: Extract elastic in the installation directory
       become: true
       unarchive:
         copy: false
-        src: "/tmp/elasticsearch-{{ elastic_version }}-linux-x86_64.tar.gz"
+        src: "/tmp/elasticsearch-8.3.3-linux-x86_64.tar.gz"
         dest: "{{ elastic_home }}"
         extra_opts: [--strip-components=1]
-        creates: "{{ elastic_home }}/bin/elasticsearch"
+        creates: "{{ elastic_home }}/bin/elastic"
       tags:
         - elastic
     - name: Set environment Elastic
@@ -70,3 +63,36 @@
         src: templates/elk.sh.j2
         dest: /etc/profile.d/elk.sh
       tags: elastic
+- name: Install Kibana
+  hosts: server2
+  tasks:
+    - name: Upload .tar.gz file containing binaries from local storage
+      copy:
+        src: "{{ kibana_package }}"
+        dest: "/tmp/kibana-8.3.3-linux-x86_64.tar.gz"
+      register: download_kibana_binaries
+      until: download_kibana_binaries is succeeded
+      tags: kibana
+    - name: Ensure installation dir exists
+      become: true
+      file:
+        state: directory
+        path: "{{ kibana_home }}"
+      tags: kibana
+    - name: Extract Kibana in the installation directory
+      become: true
+      unarchive:
+        copy: false
+        src: "/tmp/kibana-8.3.3-linux-x86_64.tar.gz"
+        dest: "{{ kibana_home }}"
+        extra_opts: [--strip-components=1]
+        creates: "{{ kibana_home }}/bin/kibana"
+      tags:
+        - kibana
+    - name: Set environment kibana
+      become: true
+      template:
+        src: templates/kibana.sh.j2
+        dest: /etc/profile.d/kibana.sh
+        mode: 0644
+      tags: kibana
