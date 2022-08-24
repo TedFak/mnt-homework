@@ -5,7 +5,7 @@
   hosts: all
   gather_facts: false
   tasks:
-  - name: Check Elastic version
+  - name: Check Kibana version
     shell:
-      cmd: /opt/elastic/7.10.1/bin/elasticsearch --version
+      cmd: /opt/kibana/8.3.3/bin/kibana --version
     changed_when: false
